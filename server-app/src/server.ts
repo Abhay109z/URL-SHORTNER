@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 import connectDB from "./config/dbConfig";
 import shortUrl from "./routes/shortUrl";
 
@@ -23,6 +24,14 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/", shortUrl);
+
+// Serve static files from the client app
+const clientBuildPath = path.join(__dirname, "../../client-app/dist");
+app.use(express.static(clientBuildPath));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(clientBuildPath, "index.html"));
+});
 
 async function startServer() {
   try {

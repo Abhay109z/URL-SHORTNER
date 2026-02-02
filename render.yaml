@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: url-shortner
+    env: node
+    buildCommand: cd client-app && npm install && VITE_SERVER_URL=/api npm run build && cd ../server-app && npm install && npm run build
+    startCommand: cd server-app && npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.14.0
