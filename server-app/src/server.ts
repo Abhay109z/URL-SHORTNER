@@ -27,10 +27,21 @@ app.use("/api/", shortUrl);
 
 // Serve static files from the client app
 const clientBuildPath = path.join(__dirname, "../../client-app/dist");
+console.log("Serving static files from:", clientBuildPath);
+
 app.use(express.static(clientBuildPath));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(clientBuildPath, "index.html"));
+  const indexPath = path.join(clientBuildPath, "index.html");
+  console.log("Request for path:", req.path);
+  console.log("Serving index.html from:", indexPath);
+  
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error("Error serving index.html:", err);
+      res.status(500).send("Error loading client app");
+    }
+  });
 });
 
 async function startServer() {
